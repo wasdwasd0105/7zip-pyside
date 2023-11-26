@@ -38,7 +38,7 @@ pip install pyside6 chardet pyobjc
 python ./main.py
 ```
 
-## How I publish to Appstore
+## How do I publish to Appstore
 
 - [AppStore](https://wasdwasd0105.github.io/2023/11/23/Publish-Python-Qt-App-to-Appstore/)
 - [MacOS Notarize](https://wasdwasd0105.github.io/2023/11/23/Notarize-a-MacOS-Python-Qt-App/)
