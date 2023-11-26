@@ -4,7 +4,7 @@ import sys
 import objc
 
 from Cocoa import NSPasteboard, NSPasteboardItem
-from Foundation import NSURL, NSString, NSAppleEventManager, NSApplication, NSObject
+from Foundation import NSURL, NSString, NSAppleEventManager, NSApplication, NSObject, NSBundle
 from AppKit import NSWorkspace
 from PySide6.QtWidgets import QMessageBox
 from objc._pycoder import NSData
@@ -83,8 +83,6 @@ def resolve_bookmark(encoded_data):
     if error or not resolved_url:
         return None
 
-
-
     return resolved_url.path()
 
 
@@ -142,3 +140,12 @@ def stop_accessing_resource(encoded_data):
     # Start accessing the security-scoped resource
     res = resolved_url.stopAccessingSecurityScopedResource()
     return res
+
+
+def get_app_version():
+    try:
+        bundle = NSBundle.mainBundle()
+        info = bundle.localizedInfoDictionary() or bundle.infoDictionary()
+        return info.get("CFBundleShortVersionString", "GitHub Source")
+    except:
+        return f'Unknown version'

@@ -1,8 +1,9 @@
 import shutil
 
-from PySide6.QtWidgets import QTreeWidget, QTreeWidgetItem, QStyle, QProgressDialog, QMenu, QLabel, QWidget, QVBoxLayout, \
+from PySide6.QtWidgets import QTreeWidget, QTreeWidgetItem, QStyle, QProgressDialog, QMenu, QLabel, QWidget, \
+    QVBoxLayout, \
     QLineEdit, QMessageBox, QInputDialog, QApplication
-from PySide6.QtCore import Qt, QMimeData, QUrl, QThread, Signal, QCoreApplication
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon, QDrag, QAction
 import subprocess
 import sys
@@ -52,6 +53,7 @@ class MainPane(QWidget):
         # set the drag-drop mode
         self.setAcceptDrops(True)
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
+        #self.tree_widget.setDragEnabled(True)
         self.tree_widget.setDragDropMode(QTreeWidget.DragDropMode.DropOnly)
 
         # Allow multi-selection
@@ -89,11 +91,10 @@ class MainPane(QWidget):
 
         self.archiver = Archiver(self)
 
-        self.extractor = Extractor(self.parent())
+        self.extractor = Extractor(self)
         self.archive_path = None
 
         self.settings_manager = SettingsManager()
-
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key.Key_C and event.modifiers() == Qt.KeyboardModifier.ControlModifier:

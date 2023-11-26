@@ -435,7 +435,14 @@ class Extractor:
         if self.double_click_file_temp_dir is None or self.double_click_file is None:
             return
 
+        is_archive = self.is_supported_archive(self.double_click_file)
         extracted_file_path = os.path.join(self.double_click_file_temp_dir, os.path.basename(self.double_click_file))
+
+        if is_archive:
+            self.parent.close_and_clear()
+            self.parent.display_archive_contents(extracted_file_path)
+            return
+
         # Open the file (this will open the file with the default application associated with its file type)
         if os.path.exists(extracted_file_path):
             if sys.platform == "win32":

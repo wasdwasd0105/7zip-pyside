@@ -3,7 +3,8 @@ import sys
 import os
 
 import chardet
-from PySide6.QtCore import QThread, Signal
+from PySide6.QtGui import QDesktopServices, QPixmap
+from PySide6.QtCore import QThread, Signal, Qt
 from PySide6.QtWidgets import QDialog, QTextEdit, QPushButton, QVBoxLayout, QProgressDialog, QMessageBox, QFormLayout, \
     QLabel
 
@@ -14,7 +15,6 @@ def resource_path(relative_path):
     base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
     print(os.path.join(base_path, relative_path))
     return os.path.join(base_path, relative_path)
-
 
 
 def determine_7zip_binary():
@@ -54,7 +54,6 @@ def get_supported_extensions():
 
 
 def show_file_properties(file_path: str):
-
     # Platform-specific commands to show properties
     if sys.platform == "win32":
         # Windows
@@ -161,6 +160,16 @@ class FileInfoDialogOSX(QDialog):
         self.setLayout(layout)
 
 
+def get_app_version():
+    if sys.platform == "darwin":
+        # macOS
+        return SevenZHelperMacOS.get_app_version()
+
+    # Not yet finish
+    else:
+        return "Github"
+
+
 class DeleteWorker(QThread):
     finished = Signal(bool, str)
 
@@ -238,3 +247,45 @@ class ArchiveTester:
 
         result_dialog.setLayout(layout)
         result_dialog.exec()
+
+
+class AboutDialog(QDialog):
+    def __init__(self):
+        super(AboutDialog, self).__init__()
+        self.setWindowTitle("About 7-Zip Archiver")
+
+        layout = QVBoxLayout()
+
+        image_label = QLabel(self)
+        pic_location = resource_path('./pics/7-zip-logo.png')
+        pixmap = QPixmap(pic_location)
+
+        scaled_pixmap = pixmap.scaled(150, 150, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        # Set resized QPixmap
+        image_label.setPixmap(scaled_pixmap)
+        image_label.setAlignment(Qt.AlignCenter)
+
+        layout.addWidget(image_label)
+
+        version_label = QLabel(f"Version: {get_app_version()}")
+        version_label.setAlignment(Qt.AlignCenter)
+        layout.addWidget(version_label)
+
+        license_label = QLabel("7-Zip Archiver is Open Source \nunder GNU GPL 3.0")
+        license_label.setAlignment(Qt.AlignCenter)
+        layout.addWidget(license_label)
+
+        igor_pavlov_label = QLabel("Based on Igor Pavlov's 7zz executable")
+        igor_pavlov_label.setAlignment(Qt.AlignCenter)
+        layout.addWidget(igor_pavlov_label)
+
+        website_button = QPushButton("Project Website")
+        website_button.clicked.connect(lambda: QDesktopServices.openUrl("https://www.7zip-pyqt.com/"))
+
+        copyright_label = QLabel("© MANGO FESTIVAL LLC")
+        copyright_label.setAlignment(Qt.AlignCenter)
+        layout.addWidget(copyright_label)
+
+        layout.addWidget(website_button)
+
+        self.setLayout(layout)

@@ -4,3 +4,4 @@
 build
 dist
 private
+__pycache__

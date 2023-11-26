@@ -6,7 +6,7 @@ from PySide6.QtGui import QPalette
 from PySide6.QtWidgets import QFileDialog, QMessageBox, QProgressDialog, QHBoxLayout, QPushButton, QLineEdit, QLabel, \
     QSpinBox, QComboBox, QVBoxLayout, QDialog, QCheckBox, QProgressBar
 from PySide6.QtCore import QThread, Signal, Qt
-import SevenZUtils  # Assuming this contains your utility functions
+import SevenZUtils
 
 
 class ArchivingThread(QThread):

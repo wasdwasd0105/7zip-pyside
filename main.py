@@ -6,6 +6,7 @@ from menu_bar import MenuBar
 from tool_bar import ToolBar
 from navigation_pane import NavigationContainer
 from main_pane import MainPane
+from SevenZHelperMacOS import get_app_version
 
 class CustomApplication(QApplication):
     def __init__(self, argv):
@@ -24,7 +25,7 @@ class SevenZipGUI(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle('7-Zip GUI')
+        self.setWindowTitle('7-Zip Archiver')
         self.setGeometry(100, 100, 800, 600)
 
         # Set up Menu Bar and Toolbar
@@ -52,7 +53,6 @@ class SevenZipGUI(QMainWindow):
         container = QWidget()
         container.setLayout(layout)
         self.setCentralWidget(container)
-
         self.show()
 
 if __name__ == '__main__':

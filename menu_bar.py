@@ -2,9 +2,10 @@ import os
 import sys
 
 from PySide6.QtWidgets import QMenuBar, QMenu, QFileDialog, QMessageBox
-from PySide6.QtGui import QAction
+from PySide6.QtGui import QAction, QDesktopServices
 from qsetting_manager import SettingsManager
 from SevenZHelperMacOS import create_bookmark, resolve_bookmark, start_accessing_resource, stop_accessing_resource
+from SevenZUtils import AboutDialog
 
 
 class MenuBar(QMenuBar):
@@ -42,8 +43,8 @@ class MenuBar(QMenuBar):
 
             action = QAction(display_path, self.window)
             action.triggered.connect(
-                lambda _, d_path=display_path, r_path=real_path, b_path=bookmark: self.open_workspace(d_path, r_path,
-                                                                                                      b_path))
+                lambda d_path=display_path, r_path=real_path, b_path=bookmark: self.open_workspace(d_path, r_path,
+                                                                                                   b_path))
             workspace_menu.addAction(action)
 
         workspace_menu.addSeparator()
@@ -82,9 +83,9 @@ class MenuBar(QMenuBar):
         settings_menu.addAction(reset_option)
         reset_option.triggered.connect(lambda: self.toggle_reset())
 
-        about_action = QAction("About", self.window)
-        settings_menu.addAction(about_action)
-
+        about_option = QAction("About", self.window)
+        settings_menu.addAction(about_option)
+        about_option.triggered.connect(lambda: self.toggle_about_page())
 
         self.addMenu(settings_menu)
 
@@ -117,7 +118,7 @@ class MenuBar(QMenuBar):
 
         self.window.nav_pane.clean_navigation_pane()
         self.window.nav_pane.open_workspace_folder(display_path, real_path)
-        #print(real_path)
+        # print(real_path)
 
     def update_menu_bar(self):
         self.workspace_history = self.settings_manager.get_value("workspace_history", [])
@@ -150,3 +151,7 @@ class MenuBar(QMenuBar):
         if reply == QMessageBox.StandardButton.Yes:
             self.settings_manager.reset()
             sys.exit()
+
+    def toggle_about_page(self):
+        about_dialog = AboutDialog()
+        about_dialog.exec_()
